@@ -17,7 +17,7 @@ const Register = () => {
         const password = formData.get('password')
         const confirmPassword = formData.get('confirmPassword')
         console.log(name,email,password,confirmPassword);
-
+        
         createUser(email,password)
         .then(result=>
             swal({
@@ -27,7 +27,7 @@ const Register = () => {
               }))
         .catch(error => 
             swal({
-            title: "Error",
+            title: error.message.substring(9),
             icon: "warning",
             dangerMode: true,
           }))
