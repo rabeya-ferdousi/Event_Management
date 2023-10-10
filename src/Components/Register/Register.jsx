@@ -1,11 +1,13 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Provider/AuthProvider';
 import swal from 'sweetalert';
-
+import {SiGmail} from "react-icons/Si"
 const Register = () => {
 
-    const {createUser}= useContext(AuthContext)
+    const {createUser,signInWithGmail}= useContext(AuthContext)
+    const [regError,setRegError] = useState('')
+    const [success,setSuccess] = useState('')
 
     const handleReg = e => {
         e.preventDefault()
@@ -16,9 +18,30 @@ const Register = () => {
         const email = formData.get('email')
         const password = formData.get('password')
         const confirmPassword = formData.get('confirmPassword')
-        console.log(name,email,password,confirmPassword);
+       // console.log(name,email,password,confirmPassword);
+       setRegError('')
+       setSuccess('')
         
         createUser(email,password)
+        .then(result=>
+            setSuccess(ok),
+            swal({
+                title: "Successfully Registered",
+                icon: "success",
+                dangerMode: false,
+              }))
+        .catch(error => 
+            setRegError(error.message),
+            swal({
+            title: error.message.substring(9),
+            icon: "warning",
+            dangerMode: true,
+          }))
+    }
+
+    const handleGoogleReg = e => {
+        e.preventDefault()
+        signInWithGmail()
         .then(result=>
             swal({
                 title: "Successfully Registered",
@@ -68,6 +91,7 @@ const Register = () => {
                     <div className="form-control mt-6">
                     <button className="btn btn-primary" >Register</button>
                     </div>
+                    <p>Register with <a onClick={handleGoogleReg} className="btn bg-white">Gmail<SiGmail></SiGmail></a></p>
                 </form>
                 <p className='text-center'>Already have an account?<Link to="/login" className=' btn btn-ghost'>Login</Link></p>
                 </div>

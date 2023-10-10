@@ -10,19 +10,22 @@ import Home from './Components/Home/Home.jsx';
 import LogIn from './Components/LogIn/LogIn.jsx';
 import Register from './Components/Register/Register.jsx';
 import Services from './Components/Services/Services.jsx';
-import Profile from './Components/Profile/Profile.jsx';
 import AuthProvider from './Provider/AuthProvider';
 import PrivateRoute from './PrivateRoute/PrivateRoute';
+import ErrorPage from './Components/ErrorPage/ErrorPage';
+
 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root></Root>,
+    errorElement: <ErrorPage></ErrorPage>,
     children : [
       {
         path : "/",
-        element : <Home></Home>
+        element : <Home></Home>,
+        loader : ()=>fetch('/events.json')
       },
       {
         path : "/login",
@@ -36,13 +39,8 @@ const router = createBrowserRouter([
         path : "/services",
         element : <PrivateRoute>
           <Services></Services>
-        </PrivateRoute>
-      },
-      {
-        path : "/profile",
-        element : <PrivateRoute>
-        <Profile></Profile>
-      </PrivateRoute>
+        </PrivateRoute>,
+        loader : () =>fetch('./events.json')
       }
     ]
   },
